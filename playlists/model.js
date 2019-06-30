@@ -1,7 +1,5 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
-const Song = require('../songs/model')
-
 
 const Playlist = db.define(
     'playlists',
@@ -17,7 +15,5 @@ const Playlist = db.define(
         timestamps: false
       }
 )
-
-Playlist.hasMany(Song, { onDelete: 'cascade' })
 
 module.exports = Playlist

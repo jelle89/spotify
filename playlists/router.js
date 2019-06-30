@@ -1,11 +1,12 @@
 const { Router } = require('express')
 const Playlist = require('./model')
 const Song = require('../songs/model')
+const authentication  = require('../users/router')
 
 const router = new Router()
 
 router.post(
-  '/playlists',
+  '/playlists', authentication,
   (request, response, next) => 
   Playlist
   .create(request.body)
@@ -14,7 +15,7 @@ router.post(
 ) 
 
 router.get(
-  '/playlists',
+  '/playlists', authentication,
   (request, response, next) => 
     Playlist
     .findAll()
@@ -22,28 +23,19 @@ router.get(
     .catch(error => next(error))
 )
 
-router.get('/playlists/:id', function (request, response, next) {
+router.get('/playlists/:id', authentication, function (request, response, next) {
     Playlist
     .findByPk(request.params.id, {include: [Song] })
     .then(playlists => response.send(playlists))
     .catch(error => next(error))
   })
 
-  router.delete('/playlists/:id', function (request, response, next) {
+  router.delete('/playlists/:id', authentication,function (request, response, next) {
     Playlist
     .findByPk(request.params.id)
     .then(playlists => playlists.destroy(playlists))
     .catch(error => next(error))
   })
   
-// router.put('/playlists/:id', function (request, response) {
-//     const id = request.params.id
-
-//     Playlist
-//     .findByPk(id)
-//     .then(playlists => playlists.update(request.body))
-//     .then(playlists => response.send(playlists))
-//     .catch(error => next(error))
-//   })
 
 module.exports = router

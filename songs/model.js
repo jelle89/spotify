@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
-// const Playlist = require('../playlists/model')
+
 
 const Song = db.define(
     'songs',
