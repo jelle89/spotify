@@ -1,8 +1,5 @@
 const express = require('express');
 const bodyParser = require('express')
-const db = require('./db')
-const Playlist = require('./playlists/model')
-const Song = require('./songs/model')
 const playlistRouter = require('./playlists/router')
 const songRouter = require('./songs/router')
 // const authRouter = require('./auth/router')

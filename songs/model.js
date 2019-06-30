@@ -1,28 +1,34 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
-const Playlist = require('../playlists/model')
+// const Playlist = require('../playlists/model')
 
 const Song = db.define(
     'songs',
     {
         title: {
             type: Sequelize.STRING,
-            field: 'title',
-            allowNull: false
+            field: 'title'
         },
         artist: {
             type: Sequelize.STRING,
-            field: 'artist',
-            allowNull: false
+            field: 'artist'
         },
         album: {
             type: Sequelize.STRING,
-            field: 'album',
+            field: 'album'
+        },
+        playlistId: {
+            type: Sequelize.INTEGER,
+            field: 'playlistId',
             allowNull: false
         }
+    },
+    {
+      tableName: 'songs',
+      timestamps: false
+      
     }
 )
-
-Song.belongsTo(Playlist)
+// Song.belongsTo(Playlist, {as: playlists, foreignKey: 'playlistId'})
 
 module.exports = Song

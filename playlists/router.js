@@ -4,38 +4,46 @@ const Song = require('../songs/model')
 
 const router = new Router()
 
+router.post(
+  '/playlists',
+  (request, response, next) => 
+  Playlist
+  .create(request.body)
+  .then(playlists => response.json(playlists))
+  .catch(error => next(error))
+) 
+
 router.get(
   '/playlists',
-  (request, response, next) => Playlist
+  (request, response, next) => 
+    Playlist
     .findAll()
     .then(playlists => response.send(playlists))
     .catch(error => next(error))
 )
 
 router.get('/playlists/:id', function (request, response, next) {
-    const id = request.params.id
     Playlist
-    .findByPk(id)
+    .findByPk(request.params.id, {include: [Song] })
     .then(playlists => response.send(playlists))
     .catch(error => next(error))
   })
 
-router.post(
-    '/playlists',
-    (request, response, next) => Playlist
-    .create(request.body)
-    .then(playlists => response.json(playlists))
-    .catch(error => next(error))
-)
-
-router.put('/playlists/:id', function (request, response) {
-    const id = request.params.id
-
+  router.delete('/playlists/:id', function (request, response, next) {
     Playlist
-    .findByPk(id)
-    .then(playlists => playlists.update(request.body))
-    .then(playlists => response.send(playlists))
+    .findByPk(request.params.id)
+    .then(playlists => playlists.destroy(playlists))
     .catch(error => next(error))
   })
+  
+// router.put('/playlists/:id', function (request, response) {
+//     const id = request.params.id
+
+//     Playlist
+//     .findByPk(id)
+//     .then(playlists => playlists.update(request.body))
+//     .then(playlists => response.send(playlists))
+//     .catch(error => next(error))
+//   })
 
 module.exports = router

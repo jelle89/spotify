@@ -4,39 +4,16 @@ const Playlist = require('../playlists/model')
 
 const router = new Router()
 
-router.get(
-  '/songs',
-  (request, response, next) => Song
-    .findAll()
-    .then(songs => response.send(songs))
-    .catch(error => next(error))
-)
+router.post('/playlists/:id/songs', (request, response, next) => {
 
-router.get('/songs/:id', function (request, response, next) {
-    const id = (request.params.id)
-    Song
-    .findByPk(id, {include: [Playlist]})
-    .then(songs => response.send(songs))
-    .catch(error => next(error))
-  })
-  
-
-router.post(
-    '/songs',
-    (request, response, next) => Song
-    .create(request.body)
-    .then(songs => response.json(songs))
-    .catch(error => next(error))
-)
-
-router.put('/songs/:id', function (request, response) {
-    const id = request.params.id
-
-    Song
-    .findByPk(id)
-    .then(songs => songs.update(request.body))
-    .then(songs => response.send(songs))
-    .catch(error => next(error))
-  })
-
+  Song.create({ ...request.body })
+        .then(song => {
+          if (!song)
+            return response.status(404).send({
+              message: 'Song does not exist'
+            });
+          return response.status(201).send(song)
+        })
+        .catch(error => next(error))
+    })
 module.exports = router
